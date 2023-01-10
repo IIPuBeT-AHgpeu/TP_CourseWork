@@ -1,11 +1,12 @@
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using TP_CourseWork.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddTransient<IStrategyByPicture>(c=> NetSingleton.Instance as IStrategyByPicture);
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "FaceDetection", Version = "v1" });
