@@ -1,5 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
+using TP_CourseWork.Models;
 using TP_CourseWork.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,8 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "FaceDetection", Version = "v1" });
 });
+builder.Services.AddDbContext<HistoryContext>(options =>
+    options.UseNpgsql("Host=localhost;Port=5432;Database=history_db;Username=postgres;Password=root"));
 
 var app = builder.Build();
 

@@ -1,8 +1,20 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@{    
+    Layout = "_Layout";
+    ViewData["Title"] = "Распознавание";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<hr />
+<h1 style="text-align: center;">Определение лиц</h1>
+<hr />
+<table style="margin-top: 100px;" align="center">
+<tbody>
+<tr>
+<td><input type="file" name="uploadedFile" /></td>
+<td><input type="text" readonly name="num" value="{}"/></td>
+</tr>
+</tbody>
+</table>
+<div align="center" style="margin-top: 30px">
+ <input type="submit" name="find" value="Определить" style="margin-right: 20px"/>
+ <input type="submit" name="save" value="Сохранить"/> 
 </div>

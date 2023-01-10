@@ -13,11 +13,6 @@ using Image = TP_CourseWork.Models.Image;
 
 namespace TP_CourseWork.Controllers
 {
-    /// <summary>
-    /// Get rectangles of face area from specified image
-    /// </summary>
-    [ApiController]
-    [Route("api/[controller]")]
     public class HomeController : Controller
     {
         private IStrategyByPicture strategyByPicture;
@@ -30,6 +25,18 @@ namespace TP_CourseWork.Controllers
         }
 
         #region Methods
+
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult History()
+        {
+            return View();
+        }
 
         [Route("~/api/[controller]/Locations")] //
         [HttpPost]
