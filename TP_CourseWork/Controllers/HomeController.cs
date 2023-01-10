@@ -9,13 +9,13 @@ namespace TP_CourseWork.Controllers
     {
         private IStrategyByPicture strategyByPicture;
         private readonly ILogger<HomeController> _Logger;
-        private IRepository<Recognize> _db;
+        private IPostgreSQLRepository _db;
 
-        public HomeController(ILogger<HomeController> logger, IStrategyByPicture strategyByPicture, HistoryContext context)
+        public HomeController(ILogger<HomeController> logger, IStrategyByPicture strategyByPicture, IPostgreSQLRepository db)
         {
             this._Logger = logger;
             this.strategyByPicture = strategyByPicture;
-            _db = new PostgreSQLRepository(context);
+            _db = db;
         }
 
         #region Methods

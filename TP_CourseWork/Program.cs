@@ -15,6 +15,8 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<HistoryContext>(options =>
     options.UseNpgsql("Host=localhost;Port=5432;Database=history_db;Username=postgres;Password=root"));
 
+builder.Services.AddScoped<IPostgreSQLRepository, PostgreSQLRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

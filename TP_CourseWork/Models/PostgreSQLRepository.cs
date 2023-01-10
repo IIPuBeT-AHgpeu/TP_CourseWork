@@ -2,7 +2,7 @@
 
 namespace TP_CourseWork.Models
 {
-    public class PostgreSQLRepository : IRepository<Recognize>
+    public class PostgreSQLRepository : IPostgreSQLRepository
     {
         private HistoryContext _db;
 
