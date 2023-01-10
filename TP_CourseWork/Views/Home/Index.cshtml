@@ -2,19 +2,23 @@
     Layout = "_Layout";
     ViewData["Title"] = "Распознавание";
 }
-
+<form action="/Home/Index" method="post" class="form-example" enctype="multipart/form-data">
 <hr />
 <h1 style="text-align: center;">Определение лиц</h1>
 <hr />
 <table style="margin-top: 100px;" align="center">
 <tbody>
-<tr>
-<td><input type="file" name="uploadedFile" /></td>
-<td><input type="text" readonly name="num" value="{}"/></td>
-</tr>
+    <tr>
+        <td style="padding: 10px;">Файл</td>
+        <td style="padding: 10px;">Количество обнаруженных лиц</td>
+    </tr>
+    <tr>
+        <td style="padding: 10px;"><input type="file" name="image" /></td>
+        <td style="padding: 10px;"><input type="text" readonly name="num" value="@ViewBag.Num"/></td>
+    </tr>
 </tbody>
 </table>
 <div align="center" style="margin-top: 30px">
  <input type="submit" name="find" value="Определить" style="margin-right: 20px"/>
- <input type="submit" name="save" value="Сохранить"/> 
 </div>
+</form>

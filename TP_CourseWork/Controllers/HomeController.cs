@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using DlibDotNet;
-//using FaceDetection.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Mvc;
+using TP_CourseWork.Models;
 using TP_CourseWork.Services;
 using Image = TP_CourseWork.Models.Image;
 
@@ -17,11 +9,13 @@ namespace TP_CourseWork.Controllers
     {
         private IStrategyByPicture strategyByPicture;
         private readonly ILogger<HomeController> _Logger;
+        private IRepository<Recognize> _db;
 
-        public HomeController(ILogger<HomeController> logger, IStrategyByPicture strategyByPicture)
+        public HomeController(ILogger<HomeController> logger, IStrategyByPicture strategyByPicture, HistoryContext context)
         {
             this._Logger = logger;
             this.strategyByPicture = strategyByPicture;
+            _db = new PostgreSQLRepository(context);
         }
 
         #region Methods
@@ -35,34 +29,51 @@ namespace TP_CourseWork.Controllers
         [HttpGet]
         public IActionResult History()
         {
-            return View();
+            List<Recognize> recs = _db.GetAll().ToList();
+
+            return View(recs);
         }
 
-        [Route("~/api/[controller]/Locations")] //
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<int> CountFacesByPicture(IFormFile image)
-        {           
+        public ActionResult<int> Index(IFormFile image)
+        {
             try
             {
                 int count = 0;
+                Recognize rec = new Recognize();
+
                 using (var ms = new MemoryStream())
                 {
                     image.CopyTo(ms);
 
+                    byte[] bytes = ms.ToArray();
+
+                    rec.Image = bytes;
+
                     strategyByPicture = new FacesByPicture();
-                    count = strategyByPicture.GetObjectsCount(new Image() { Data = ms.ToArray() });
+                    count = strategyByPicture.GetObjectsCount(new Image() { Data = bytes });
+                    rec.Result = count;
                 }
 
-                return Ok(count);
+                _db.Create(rec);
+                _db.Save();
+
+                ViewBag.Num = count;
+                return View();
             }
             catch (Exception e)
             {
-                this._Logger.LogError($"[{nameof(this.CountFacesByPicture)}] {e.Message}");
+                this._Logger.LogError($"[{nameof(this.Index)}] {e.Message}");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
+        }
+
+        [HttpGet("Home/GetImage/{id}")]
+        public IActionResult GetImage([FromRoute] int id)
+        {
+            Recognize rec = _db.GetOne(id);
+
+            return File(rec.Image, "image/png");
         }
 
         #endregion     
